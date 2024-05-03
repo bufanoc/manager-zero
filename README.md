@@ -50,5 +50,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Contact
 
-If you have any questions, please feel free to contact Carmine.
+If you have any questions, please feel free to contact me.
 
