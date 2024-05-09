@@ -2,15 +2,14 @@
 
 def process_command(data):
     """
-    Process commands based on data received from the client.
+    Processes commands received from the client based on the 'action' field in the data.
 
     Args:
-    data (dict): Parsed JSON data from the client.
+        data (dict): The data received from the client, expected to be a dictionary.
 
     Returns:
-    dict: Response to be sent back to the client.
+        dict: The response dictionary containing the status and a message.
     """
-    # Determine the action requested by the client and call the appropriate function
     action = data.get('action')
     if action == 'login':
         return login(data)
@@ -21,17 +20,16 @@ def process_command(data):
 
 def login(data):
     """
-    Handle login authentication.
+    Authenticates a user based on username and password.
 
     Args:
-    data (dict): Contains username and password for authentication.
+        data (dict): The dictionary containing 'username' and 'password'.
 
     Returns:
-    dict: Result of the authentication process.
+        dict: The result of the authentication process.
     """
     username = data.get('username')
     password = data.get('password')
-    # Simple check for username and password (replace with secure check in production)
     if username == 'admin' and password == 'admin123':
         return {"status": "success", "message": "Login successful"}
     else:
@@ -39,14 +37,15 @@ def login(data):
 
 def create_vm(data):
     """
-    Placeholder function for VM creation logic.
+    Simulates the creation of a virtual machine. This function can be expanded
+    with actual VM creation logic.
 
     Args:
-    data (dict): Contains data necessary to create a VM.
+        data (dict): The dictionary that might contain parameters for VM creation.
 
     Returns:
-    dict: Confirmation of VM creation.
+        dict: Confirmation of VM creation.
     """
-    # Example: Assume VM creation is successful
+    # Placeholder for actual VM creation logic
     return {"status": "success", "message": "VM created successfully"}
 
