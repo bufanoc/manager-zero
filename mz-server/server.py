@@ -1,52 +1,44 @@
+# server.py
 import socket
 import json
+from command_processor import process_command
 
 def server_program():
-    # Setup the server to listen on all interfaces at a specified port
-    host = '0.0.0.0'
-    port = 5000
+    """
+    Main server program that listens for incoming connections and processes data.
+    """
+    host = '0.0.0.0'  # Listen on all network interfaces
+    port = 5000       # Port number for the server
 
-    server_socket = socket.socket()  # Create a socket object for network communication
-    server_socket.bind((host, port))  # Bind the socket to all IP addresses of this host at port 5000
-    server_socket.listen(2)  # Setup the socket to allow up to 2 simultaneous connections
+    server_socket = socket.socket()  # Create a new socket for network communication
+    server_socket.bind((host, port))  # Bind the socket to the host and port
+    server_socket.listen(2)  # Listen for incoming connections (max 2 in the queue)
     print("Server is listening on port:", port)
 
     while True:
-        conn, address = server_socket.accept()  # Wait for a connection, accept it, and get the connection object
-        print("Connection from:", address)
+        conn, address = server_socket.accept()  # Accept a new connection
+        print("Connection from:", address)  # Print the address of the connected client
 
         try:
             while True:
-                data = conn.recv(1024).decode()  # Receive data from the client, 1024 bytes at a time
+                data = conn.recv(1024).decode()  # Receive data from the client
                 if not data:
-                    break  # If no data is received, break out of the loop to close the connection
+                    break  # If no data is received, exit the loop
 
-                data_json = json.loads(data)  # Try to parse the received data as JSON
-                response = process_command(data_json)  # Process the parsed JSON data
-                conn.send(json.dumps(response).encode())  # Send the response back as a JSON encoded string
+                data_json = json.loads(data)  # Parse the JSON data
+                response = process_command(data_json)  # Process the command
+                conn.send(json.dumps(response).encode())  # Send the response back as JSON
         except json.JSONDecodeError:
-            # Handle JSON decoding errors (if received data is not valid JSON)
-            conn.send(json.dumps({"status": "error", "message": "Invalid JSON format"}).encode())
+            error_response = {"status": "error", "message": "Invalid JSON format"}
+            conn.send(json.dumps(error_response).encode())  # Handle JSON errors
         except Exception as e:
-            # General exception handling for any other errors
-            print("Error:", str(e))
+            print(f"An error occurred: {str(e)}")  # Print other exceptions
+            error_response = {"status": "error", "message": "An error occurred"}
+            conn.send(json.dumps(error_response).encode())
         finally:
-            # Close the connection and print a message
-            conn.close()
-            print("Disconnected from:", address)
-
-def process_command(data_json):
-    # A function to process the received commands based on the 'action' key
-    if data_json.get('action') == 'login':
-        username = data_json.get('username')
-        password = data_json.get('password')
-        if username == 'admin' and password == 'admin123':
-            return {"status": "success"}
-        else:
-            return {"status": "error", "message": "Authentication failed"}
-    return {"status": "error", "message": "Unknown command"}
+            conn.close()  # Close the connection
+            print("Disconnected from:", address)  # Print a disconnection message
 
 if __name__ == '__main__':
     server_program()
-# In this snippet, we have defined a function process_command(data_json) to handle the received commands based on the 'action' key in the JSON data. If the action is 'login', it checks the username and password and returns a success or error response accordingly. If the action is not recognized, it returns an error response with a message "Unknown command".
 
