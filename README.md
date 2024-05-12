@@ -1,5 +1,5 @@
 # manager-zero
-Welcome to my open source Hypervisor Orchestration Management Platform, a robust and feature-rich solution designed to enhance the capabilities of network virtualization. This platform is crafted to fill a vital gap in current technology by offering extensive network virtualization features that are not available in existing solutions.
+A open source Hypervisor Orchestration Management Platform, a robust and feature-rich solution designed to enhance the capabilities of network virtualization. This platform is crafted to fill a vital gap in current technology by offering extensive network virtualization features that are not available in existing solutions.
 
 ## Project Overview
 
